@@ -22,8 +22,5 @@
     <welcome-file-list>
         <!-- Usar la landing estática como página de inicio -->
         <welcome-file>index.html</welcome-file>
-        <!-- Fallbacks opcionales -->
-        <welcome-file>index.xhtml</welcome-file>
-        <welcome-file>faces/requestPage.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>
