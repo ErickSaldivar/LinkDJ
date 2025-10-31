@@ -17,7 +17,7 @@ Funcionalidades clave
 - Precios dinámicos según tipo de pedido y demanda.
 - Soporte para QR por mesa/sector del local (concepto).
 
-- Tecnologías
+Tecnologías
 - Java Web con JSF para las vistas.
 - Bootstrap 5 para el diseño y responsividad.
 - Tomcat como servidor de aplicaciones.
