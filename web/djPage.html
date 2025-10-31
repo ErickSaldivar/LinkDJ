@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="es" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkDJ · Panel del DJ</title>
+    <meta name="description" content="Panel del DJ para gestionar pedidos musicales en tiempo real." />
+
+    <!-- Bootstrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+
+    <style>
+      :root {
+        --accent: #22c55e;
+        --muted: #a1a1aa;
+        --surface: #121417;
+      }
+      body { background: #0b0d0f; color: #e5e7eb; }
+      .navbar { backdrop-filter: blur(6px); background: rgba(10,12,14,.85)!important; }
+      .brand-logo { height: 28px; width: auto; display: block; object-fit: contain; }
+      @media (min-width: 992px) { .brand-logo { height: 32px; } }
+      .btn-success { --bs-btn-bg: var(--accent); --bs-btn-border-color: var(--accent); --bs-btn-hover-bg: #16a34a; }
+      .feature-card { background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border: 1px solid rgba(34,197,94,.15); }
+      .glass { background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.15); backdrop-filter: blur(8px); }
+      .status-dot { width: .6rem; height: .6rem; border-radius: 50%; display: inline-block; }
+      .status-connected { background: #22c55e; }
+      .status-disconnected { background: #ef4444; }
+      .badge-vip { background: rgba(34,197,94,.18); color: var(--accent); border: 1px solid rgba(34,197,94,.35); }
+      .queue-item { border-color: rgba(255,255,255,.15) !important; }
+      .queue-item:hover { border-color: rgba(34,197,94,.35) !important; }
+      .card-bg { background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+      <div class="container py-2">
+        <a class="navbar-brand d-flex align-items-center" href="../index.html" title="LinkDJ">
+          <img src="../img/logo.png" alt="Logo LinkDJ" class="brand-logo" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="nav" class="collapse navbar-collapse">
+          <ul class="navbar-nav ms-auto small">
+            <li class="nav-item"><a class="nav-link" href="../index.html#home">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="../index.html#features">Funciones</a></li>
+            <li class="nav-item"><a class="nav-link" href="../index.html#pricing">Precios</a></li>
+            <li class="nav-item"><a class="nav-link" href="../index.html#contact">Contacto</a></li>
+          </ul>
+          <div class="d-flex gap-2 ms-lg-3">
+            <a class="btn btn-outline-light btn-sm px-3" href="../requestPage.xhtml">Pedidos</a>
+            <span class="btn btn-success btn-sm px-3 disabled">Panel DJ</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container py-4 py-lg-5">
+      <header class="mb-4 mb-lg-5">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            <h1 class="h2 mb-1">Panel del DJ</h1>
+            <p class="text-secondary mb-0">Gestiona la cola de pedidos en tiempo real, acepta o rechaza solicitudes y marca las canciones reproducidas.</p>
+          </div>
+          <div class="text-end">
+            <div class="small text-secondary">Estado conexión</div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="status-dot status-connected"></span>
+              <span class="small">Conectado</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Filtros y acciones rápidas -->
+      <section class="glass rounded-4 p-3 p-md-4 mb-4">
+        <div class="row g-3 align-items-end">
+          <div class="col-12 col-md-6">
+            <label class="form-label small text-secondary">Filtrar por estado</label>
+            <div class="btn-group" role="group" aria-label="Filtros cola">
+              <input type="radio" class="btn-check" name="filtroEstado" id="f-pendiente" checked>
+              <label class="btn btn-outline-light" for="f-pendiente">Pendiente</label>
+              <input type="radio" class="btn-check" name="filtroEstado" id="f-aceptado">
+              <label class="btn btn-outline-light" for="f-aceptado">Aceptado</label>
+              <input type="radio" class="btn-check" name="filtroEstado" id="f-reproducido">
+              <label class="btn btn-outline-light" for="f-reproducido">Reproducido</label>
+              <input type="radio" class="btn-check" name="filtroEstado" id="f-todos">
+              <label class="btn btn-outline-light" for="f-todos">Todos</label>
+            </div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label small text-secondary">Buscar en la cola</label>
+            <div class="input-group">
+              <span class="input-group-text bg-body-secondary border-0"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control bg-body-secondary border-0" placeholder="Canción, usuario o mensaje" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="row g-4">
+        <!-- Cola de pedidos -->
+        <div class="col-12 col-lg-8">
+          <section>
+            <h2 class="h6 text-uppercase text-secondary mb-3">Cola de pedidos</h2>
+            <div class="vstack gap-3">
+              <!-- Item cola -->
+              <div class="card queue-item text-bg-dark border rounded-4">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="badge badge-vip">VIP</span>
+                        <span class="small text-secondary">Pedido #10234 · Mesa 12</span>
+                      </div>
+                      <h3 class="h5 mb-1">“Midnight Groove” — Tech-House</h3>
+                      <p class="small text-secondary mb-2">Mensaje: “Para Sarah, ¡eres la mejor!”</p>
+                      <div class="small">Precio: <span class="text-success fw-semibold">S/ 20.00</span></div>
+                    </div>
+                    <div class="text-end small">
+                      <div class="text-secondary">Hace 2 min</div>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <button class="btn btn-success btn-sm"><i class="bi bi-check-lg me-1"></i>Aceptar</button>
+                    <button class="btn btn-outline-light btn-sm"><i class="bi bi-x-lg me-1"></i>Rechazar</button>
+                    <button class="btn btn-outline-light btn-sm"><i class="bi bi-music-note-beamed me-1"></i>Marcar reproducido</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card queue-item text-bg-dark border rounded-4">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="badge text-bg-secondary">Normal</span>
+                        <span class="small text-secondary">Pedido #10235 · Mesa 7</span>
+                      </div>
+                      <h3 class="h5 mb-1">“Electric Dreams” — Synthwave</h3>
+                      <p class="small text-secondary mb-2">Mensaje: —</p>
+                      <div class="small">Precio: <span class="text-success fw-semibold">S/ 10.00</span></div>
+                    </div>
+                    <div class="text-end small">
+                      <div class="text-secondary">Hace 1 min</div>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-wrap gap-2 mt-3">
+                    <button class="btn btn-success btn-sm"><i class="bi bi-check-lg me-1"></i>Aceptar</button>
+                    <button class="btn btn-outline-light btn-sm"><i class="bi bi-x-lg me-1"></i>Rechazar</button>
+                    <button class="btn btn-outline-light btn-sm"><i class="bi bi-music-note-beamed me-1"></i>Marcar reproducido</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Ahora sonando + métricas -->
+        <div class="col-12 col-lg-4">
+          <section class="mb-4">
+            <h2 class="h6 text-uppercase text-secondary mb-3">Ahora sonando</h2>
+            <div class="card text-bg-dark border-0 shadow-sm overflow-hidden">
+              <img class="card-img" alt="Visual de música" src="https://images.unsplash.com/photo-1531030874896-fdef6826f2f7?q=80&w=1200&auto=format&fit=crop" />
+              <div class="card-img-overlay d-flex flex-column justify-content-end bg-gradient">
+                <div class="bg-dark bg-opacity-50 rounded p-3">
+                  <h3 class="h6 mb-1">“Rhythmic Echoes” — DJ Beat</h3>
+                  <p class="small mb-0">Tiempo transcurrido: 02:45</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 class="h6 text-uppercase text-secondary mb-3">Métricas rápidas</h2>
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="feature-card rounded-4 p-3 text-center">
+                  <div class="small text-secondary">Ingresos hoy</div>
+                  <div class="h5 mb-0">S/ 280</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-card rounded-4 p-3 text-center">
+                  <div class="small text-secondary">Pedidos pendientes</div>
+                  <div class="h5 mb-0">6</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-card rounded-4 p-3 text-center">
+                  <div class="small text-secondary">VIP ratio</div>
+                  <div class="h5 mb-0">35%</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="feature-card rounded-4 p-3 text-center">
+                  <div class="small text-secondary">Aceptados</div>
+                  <div class="h5 mb-0">12</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Controles de sesión -->
+      <section class="mt-4">
+        <div class="glass rounded-4 p-3 p-md-4">
+          <div class="row g-3 align-items-center">
+            <div class="col-12 col-md-6">
+              <div class="small text-secondary">Consola</div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="status-dot status-connected"></span>
+                <span class="small">Conectado al venue #001</span>
+              </div>
+            </div>
+            <div class="col-12 col-md-6 text-md-end">
+              <div class="d-flex flex-wrap gap-2 justify-content-md-end">
+                <button class="btn btn-outline-light btn-sm"><i class="bi bi-arrow-clockwise me-1"></i>Reconectar</button>
+                <button class="btn btn-outline-light btn-sm"><i class="bi bi-gear me-1"></i>Configuración</button>
+                <button class="btn btn-success btn-sm"><i class="bi bi-broadcast-pin me-1"></i>Iniciar sesión</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-0 py-5">
+      <div class="container text-center text-secondary small">
+        © 2025 LinkDJ. Panel del DJ.
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"></script>
+  </body>
+</html>
